@@ -65,7 +65,7 @@ namespace Offense_Detector.Api.Controller
         {
             try
             {
-                offense.OffenseValue = offense.OffenseValue?.ToLower() ?? throw new ArgumentException("OffenseValues is not defined");
+                offense.Word = offense.Word?.ToLower() ?? throw new ArgumentException("OffenseValues is not defined");
 
                 await context._offenses.AddAsync(offense);
                 await context.SaveChangesAsync();
@@ -99,11 +99,10 @@ namespace Offense_Detector.Api.Controller
 
             try
             {
-                if(string.IsNullOrEmpty(offense.OffenseValue)) 
+                if(string.IsNullOrEmpty(offense.Word)) 
                     throw new ArgumentException("OffenseValues is not defined");
 
-                valueOffense.OffenseValue = offense.OffenseValue.ToLower();
-                valueOffense.Value = offense.Value;
+                valueOffense.Word = offense.Word.ToLower();
 
                 context._offenses.Update(valueOffense);
                 await context.SaveChangesAsync();

@@ -52,7 +52,7 @@ public static class Library
         
         foreach(var word in data)
         {
-            result = text.Replace(word.OffenseValue, "");
+            result = text.Replace(word.Word, "");
         }
 
         return result;

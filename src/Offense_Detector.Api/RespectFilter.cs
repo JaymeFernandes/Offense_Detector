@@ -17,20 +17,20 @@ public static class RespectFilter
         string result = "";
 
         var isMatch = await Task.Run(() => 
-            data.Any(word => _Levenstein.GetSimilarity(word.OffenseValue, part) > 0.7 || 
-                            _Levenstein.GetSimilarity(word.OffenseValue, temp) > 0.7));
+            data.Any(word => _Levenstein.GetSimilarity(word.Word, part) > 0.7 || 
+                            _Levenstein.GetSimilarity(word.Word, temp) > 0.7));
 
         if (isMatch)
         {
             foreach (var offense in data)
             {
-                var similarity1 = await Task.Run(() => _JaroWinkler.GetSimilarity(temp, offense.OffenseValue));
-                var similarity2 = await Task.Run(() => _JaroWinkler.GetSimilarity(part, offense.OffenseValue));
+                var similarity1 = await Task.Run(() => _JaroWinkler.GetSimilarity(temp, offense.Word));
+                var similarity2 = await Task.Run(() => _JaroWinkler.GetSimilarity(part, offense.Word));
 
 
                 if (similarity1 > Sensitivity || similarity2 > Sensitivity)
                 {
-                    result = offense.OffenseValue ?? "";
+                    result = offense.Word ?? "";
                     break;
                 }
             }

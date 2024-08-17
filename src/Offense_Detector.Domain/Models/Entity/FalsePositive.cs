@@ -1,4 +1,4 @@
 namespace Offense_Detector.Data.Models.Entity
 {
-    public class FalsePositive : Entity { }
+    public class FalsePositive : EntityOffense { }
 }

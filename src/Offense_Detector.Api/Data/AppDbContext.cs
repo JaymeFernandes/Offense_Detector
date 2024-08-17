@@ -18,22 +18,18 @@ namespace Offense_Detector.Api.Data
             {
                 entity.HasKey(e => e.Id);
 
-                entity.Property(e => e.OffenseValue)
+                entity.Property(e => e.Word)
                     .HasColumnName("Offense")
                     .IsRequired()
                     .IsUnicode()
                     .HasMaxLength(90);
-
-                entity.Property(e => e.Value)
-                    .HasColumnName("Value")
-                    .IsRequired();
             });
 
             modelBuilder.Entity<FalsePositive>(entity => 
             {
                 entity.HasKey(e => e.Id);
 
-                entity.Property(e => e.OffenseValue)
+                entity.Property(e => e.Word)
                     .IsRequired()
                     .IsUnicode()
                     .HasMaxLength(90);
