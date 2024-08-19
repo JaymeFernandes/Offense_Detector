@@ -2,15 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Offense_Detector.Data.Models.Entity;
 
 namespace Offense_Detector.Domain.Models.Entity
 {
-    public class WordsManeger
+    public class WordsManeger : EntityOffense
     {
-        public int Id { get; set; }
-
         public DateTime CreateData { get; set; }
-        
-        public int DocumentCount { get; set; } = 0;
     }
 }

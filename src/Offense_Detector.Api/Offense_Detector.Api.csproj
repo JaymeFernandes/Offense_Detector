@@ -17,7 +17,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Offense_Detector.Domain\Offense_Detector.Domain.csproj" />
-    <ProjectReference Include="..\Offense_Detector.Source\Offense_Detector.Source.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Offense_Detector.Api.Data;
+using Offense_Detector.Domain.Models.Entity;
 using Offense_Detector.Source;
 
 namespace Offense_Detector.Api.Controller
@@ -24,16 +26,18 @@ namespace Offense_Detector.Api.Controller
         [Route(template:"check")]
         public async Task<IActionResult> CheckText([FromServices] AppDbContext context, [FromQuery] string text)
         {
-            var dataOffense = await context._offenses.ToListAsync();
+            if (string.IsNullOrWhiteSpace(text)) return BadRequest("Text cannot be null or empty.");
 
-            string[] parts = text.ToLower().Split(new char[] { ' ', ',', '.', ';', ':', '-', '_', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-            List<string> detected = new List<string>();
 
-            text = Library.ClearSentence(context._falsePositives.ToList(), text);
+            var dataOffense = await context._offenses.AsNoTracking().ToListAsync();
+            var falsePositive = await context._falsePositives.AsNoTracking().ToListAsync();
+            var wordsIgnore = await context._works.ToListAsync();
 
-            var tasks = parts.Select(async part =>
-            {
-                string word = await Task.Run(async () => await RespectFilter.DetectWordAsync(part, dataOffense));
+            string[] parts = Library.ClearSentence(falsePositive, wordsIgnore, text).ToLower().Split(new char[] { ' ', ',', '.', ';', ':', '-', '_', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            var detected = new ConcurrentBag<string>();
+            
+            Parallel.ForEach(parts, part => {
+                string word = RespectFilter.DetectWordAsync(part, dataOffense);
 
                 if (!string.IsNullOrEmpty(word))
                 {
@@ -41,10 +45,26 @@ namespace Offense_Detector.Api.Controller
                 }
             });
 
-            await Task.WhenAll(tasks);
+            foreach (string word in parts)
+            {
+                if (!detected.Contains(word))
+                {
+                    if ((await context._works.FirstOrDefaultAsync(x => x.Word == word)) == null) 
+                    {
+                        var wordObj = new WordsManeger() 
+                        { 
+                            Word = word, 
+                            CreateData = DateTime.Now 
+                        };
+                        await context.AddAsync(wordObj);
+                    }
+                }
+            }
 
 
-            return Ok( new { Text = text, Detected = detected });
+            await context.SaveChangesAsync();
+
+            return Ok( new { Text = text, Detected = detected.ToList() });
         }
     }
 }

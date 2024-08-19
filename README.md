@@ -1,64 +1,81 @@
 # Offense Detector 🔍
 
-The Offense Detector is a simple API for identifying offensive language in texts. By using string similarity algorithms, it checks if a text contains words considered offensive.
+Welcome to the **Offense Detector**! Our API is the perfect tool for identifying offensive language in texts. We use string similarity algorithms to analyze and flag words that may be considered offensive.
 
-[Curious how it works?](Algorithm/README.md)
+**Curious about how it works?** [Find out here!](Algorithm/README.md)
 
 <br>
 
-# Choose Language 🌐
+# Choose Your Language 🌐
 
 <table border=1>
   <tr>
-    <td><a href="https://github.com/JaymeFernandes/Detector_Ofensas/blob/main/README.md">English</a></td>
-    <td><a href="https://github.com/JaymeFernandes/Detector_Ofensas/blob/main/README_pt.md">Português</a></td>
-    <td><a href="https://github.com/JaymeFernandes/Detector_Ofensas/blob/main/README_es.md">Español</a></td>
+    <td><a href="https://github.com/JaymeFernandes/Offense_Detector/blob/master/README.md">English</a></td>
+    <td><a href="https://github.com/JaymeFernandes/Offense_Detector/blob/master/README_pt.md">Português</a></td>
+    <td><a href="https://github.com/JaymeFernandes/Offense_Detector/blob/master/README_es.md">Español</a></td>
   </tr>
 </table>
 
+<br>
 
-# Performance Boost ⚡️
+# Performance Improvement ⚡️
 
-We recently optimized our API that used to analyze 32,681 characters in 20 seconds. Now, it completes the same task in just 2 seconds!
+We’re excited to share a major performance improvement for our API! Previously, it took 20 seconds to analyze 32,681 characters. Now, it completes the same task in just 2 seconds! 🚀
 
-This achievement was made possible by utilizing parallel iterations with Parallel.ForEach.
-
-This approach automatically divides the workload among processors, allowing each core to work simultaneously.
-
-The result? Significantly improved performance! 🚀
+This was made possible by using parallel iterations with `Parallel.ForEach`. The magic? We split the task across processors, allowing each core to work simultaneously. The result? A much faster performance!
 
 <br>
 
-# Funcionalidade 🚀
-
-- Detects 118 different offensive words.
-- Calculates a score from 1 to 100 for the text.
-- Extremely sensitive to offenses, even with swapped characters:
-```
-  V4c@ = cow
-  t4r4d0 = pervert
-  |!x0 = trash
-```
+# Feature 🚀
+- **Highly sensitive to offenses, even with character substitutions:**
+  ```
+    V4c@ = cow
+    t4r4d0 = idiot
+    |!x0 = trash
+  ```
 
 <br>
 
-# Version
+# Installation 💻
 
-<table border=1>
-  <tr>
-    <td><a href="https://github.com/JaymeFernandes/Detector_Ofensas/tree/main/Local-Dll">Local</a></td>
-    <td><a href="https://github.com/JaymeFernandes/Detector_Ofensas/tree/main/Online-Api">API</a></td>
-  </tr>
-</table>
+To get started with the API, follow these steps:
+
+1. **Restore the dependency packages:**
+   ```bash
+   dotnet restore ./src/Offense_Detector.Api/Offense_Detector.Api.csproj
+   dotnet restore ./src/Offense_Detector.Domain/Offense_Detector.Domain.csproj
+   ```
+
+2. **Configure the `appsettings.Development.json` or `appsettings.json` file:**
+   ```json
+   {
+     "ConnectionStrings": {
+       "MySQLConnect": "Server=localhost;Database=Offense_Detector;Uid=root;Pwd=yourPassword;"
+     },
+     "Logging": {
+       "LogLevel": {
+         "Default": "Information",
+         "Microsoft.AspNetCore": "Warning"
+       }
+     },
+     "AllowedHosts": "*"
+   }
+   ```
+
+3. **Start the Project:**
+   ```bash
+   cd src/Offense_Detector.Api/
+   dotnet run
+   ```
 
 <br>
 
 # Contributing 🤝
 
-If you find an issue or have a suggestion, feel free to open an issue or submit a pull request. Contributions are welcome!
+If you encounter any issues or have suggestions for improvements, we’d love to hear from you! Feel free to open an issue or submit a pull request. Contributions are always welcome!
 
 <br>
 
 # License 📝
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](LICENSE). Feel free to use and adapt it to suit your needs!

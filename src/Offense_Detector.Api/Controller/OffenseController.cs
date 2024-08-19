@@ -20,7 +20,7 @@ namespace Offense_Detector.Api.Controller
         /// <param name="context">The application database context.</param>
         /// <returns>A list of all offenses, or a bad request if none are found.</returns>
         [HttpGet]
-        [Route(template:"All")]
+        [Route(template:"all")]
         public IActionResult GetAllOffense([FromServices] AppDbContext context)
         {
             var offenses = context._offenses.AsNoTracking().ToList();
@@ -28,7 +28,7 @@ namespace Offense_Detector.Api.Controller
             if(offenses.Count > 0) 
                 return Ok(offenses);
             else 
-                return BadRequest();
+                return NotFound();
         }
 
         /// <summary>
@@ -60,14 +60,24 @@ namespace Offense_Detector.Api.Controller
         /// <param name="offense">The offense entity to add.</param>
         /// <returns>The created offense, or a bad request if an error occurs.</returns>
         [HttpPost]
-        [Route(template:"Add")]
+        [Route(template:"add")]
         public async Task<IActionResult> AddOffense([FromServices] AppDbContext context, [FromBody] Offense offense)
         {
             try
             {
+                if(!string.IsNullOrEmpty(offense.Word))
+                    offense.Word = offense.Word.ToLower();
+                else 
+                    throw new ArgumentNullException(nameof(offense.Word));
+
+                var work = await context._works.FirstOrDefaultAsync(x => x.Word == offense.Word);
+
+                if(work != null) context._works.Remove(work);
+
                 offense.Word = offense.Word?.ToLower() ?? throw new ArgumentException("OffenseValues is not defined");
 
                 await context._offenses.AddAsync(offense);
+
                 await context.SaveChangesAsync();
 
                 return Created($"Get/{offense.Id}", offense);
@@ -100,9 +110,12 @@ namespace Offense_Detector.Api.Controller
             try
             {
                 if(string.IsNullOrEmpty(offense.Word)) 
-                    throw new ArgumentException("OffenseValues is not defined");
+                    throw new ArgumentNullException(nameof(offense.Word));
 
                 valueOffense.Word = offense.Word.ToLower();
+
+                var work = await context._works.FirstOrDefaultAsync(x => x.Word == offense.Word);
+                if(work != null) context._works.Remove(work);
 
                 context._offenses.Update(valueOffense);
                 await context.SaveChangesAsync();

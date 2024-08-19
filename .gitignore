@@ -3,7 +3,8 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
-appsettings.Development.json
+src/Offense_Detector.Api/appsettings.Development.json
+src/Offense_Detector.Api/appsettings.json
 
 # dotenv files
 .env

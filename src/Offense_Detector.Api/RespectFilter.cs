@@ -11,21 +11,20 @@ public static class RespectFilter
     private static Levenstein _Levenstein { get; set; } = new Levenstein();
 
 
-    public static async Task<string> DetectWordAsync(string part, List<Offense> data)
+    public static string DetectWordAsync(string part, List<Offense> data)
     {
         string temp = part.NormalizeText();
         string result = "";
 
-        var isMatch = await Task.Run(() => 
-            data.Any(word => _Levenstein.GetSimilarity(word.Word, part) > 0.7 || 
-                            _Levenstein.GetSimilarity(word.Word, temp) > 0.7));
+        var isMatch = data.Any(word => _Levenstein.GetSimilarity(word.Word, part) > 0.7 || 
+                            _Levenstein.GetSimilarity(word.Word, temp) > 0.7);
 
         if (isMatch)
         {
             foreach (var offense in data)
             {
-                var similarity1 = await Task.Run(() => _JaroWinkler.GetSimilarity(temp, offense.Word));
-                var similarity2 = await Task.Run(() => _JaroWinkler.GetSimilarity(part, offense.Word));
+                var similarity1 = _JaroWinkler.GetSimilarity(temp, offense.Word);
+                var similarity2 = _JaroWinkler.GetSimilarity(part, offense.Word);
 
 
                 if (similarity1 > Sensitivity || similarity2 > Sensitivity)
