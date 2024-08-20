@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Offense_Detector.Api.Data;
-using Offense_Detector.Api;
 using Offense_Detector.Data.Models.Entity;
 
 namespace Offense_Detector.Api.Controller
